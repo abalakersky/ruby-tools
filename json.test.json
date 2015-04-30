@@ -1,0 +1,37 @@
+{
+  "Version": 1.1,
+  "Name": "Job Recipe Script",
+  "job": {
+    "customer": {
+      "name": "NARA",
+      "project": "test_04_14"
+    }
+  },
+  "path": {
+    "munge": {
+      "rule": "/home/abalakersky/tmp/opa/TAPE_SHIPMENT4_2/"
+    }
+  },
+  "buckets": {
+    "converted": "test-opa-conv",
+    "original": "test-opa-store",
+    "logbucket": "s3io"
+  },
+  "rules": {
+    "1": {
+      "extensions": ".jp2, .j2p, .j2k",
+      "convert": true,
+      "move": true
+    },
+    "2": {
+      "extensions": ".tiff, .tff, .TIFF, .TFF, .tif",
+      "convert": true,
+      "move": true
+    },
+    "3": {
+      "extensions": "other",
+      "convert": false,
+      "move": true
+    }
+  }
+}
