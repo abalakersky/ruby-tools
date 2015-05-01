@@ -23,14 +23,14 @@ OptionParser.new do |opt|
 end.parse!
 
 case
-  when options.json == true
+  when options.yaml == true
     y_file = File.open("#{$yaml_file}", 'a')
     y_file.write(YAML.dump(JSON.parse(IO.read($json_file))))
     y_file.close
-    puts "Converted to JSON. Output file is #{$json_file}"
+    puts "Converted to YAML. Output file is #{$yaml_file}"
 
-  when options.yaml == true
+  when options.json == true
     j_file = YAML.load_file(File.open("#{$yaml_file}", 'r'))
     File.write "#{$json_file}", JSON.pretty_generate(j_file)
-    puts "Converted to YAML. Output file is #{$yaml_file}"
+    puts "Converted to JSON. Output file is #{$json_file}"
 end
