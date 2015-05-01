@@ -27,9 +27,10 @@ case
     y_file = File.open("#{$yaml_file}", 'a')
     y_file.write(YAML.dump(JSON.parse(IO.read($json_file))))
     y_file.close
+    puts "Converted to JSON. Output file is #{$json_file}"
 
   when options.yaml == true
     j_file = YAML.load_file(File.open("#{$yaml_file}", 'r'))
     File.write "#{$json_file}", JSON.pretty_generate(j_file)
-    j_file.close
+    puts "Converted to YAML. Output file is #{$yaml_file}"
 end
