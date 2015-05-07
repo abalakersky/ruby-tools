@@ -18,6 +18,7 @@ $yaml_file = ARGV[2]
 
 options = OpenStruct.new
 OptionParser.new do |opt|
+  opt.banner = "Usage: ruby YJ_Convert.rb [-j][-y] json_file.json yaml_file.yaml"
   opt.on('-j', '--json', 'Convert to JSON') { |o| options.json = o }
   opt.on('-y', '--yaml', 'Convert to YAML') { |o| options.yaml = o }
 end.parse!
