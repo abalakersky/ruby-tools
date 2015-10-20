@@ -20,6 +20,9 @@ require 'json'
 require 'optparse'
 require 'ostruct'
 
+# Amazon IP Ranges file url. Change it to current one if Amazon moves it.
+url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+
 options = OpenStruct.new
 OptionParser.new do |opt|
   opt.on('-h', '--help', 'Usage') { |o| options.help = o}
@@ -29,7 +32,7 @@ end.parse!
 
 USAGE = <<ENDUSAGE
 
-This script is used to display AWS specific IP ranges that could be used for Firewall or Security Group configurations. These ranges specify public IPs that AWS uses for a specific service.
+This script is used to display AWS specific IP ranges that could be used for Firewall or Security Group configurations. These ranges specify public IPs that AWS uses for a each public facing service.
 
 Usage:
    ruby aws-ip-ranges.rb [-h] [-r region] -s service
@@ -44,7 +47,7 @@ Usage:
       Please remember that some services, such as CloudFront and Route53 are Global and as such use only GLOBAL as their region. Their information can be gathered with or without specifying region name
 ENDUSAGE
 
-ipranges_file = JSON.parse(open("https://ip-ranges.amazonaws.com/ip-ranges.json").read)
+ipranges_file = JSON.parse(open(url).read)
 
 case
   when options.help || (!options.help && !options.region && !options.service)
