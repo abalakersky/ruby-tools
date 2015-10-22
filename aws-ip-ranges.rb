@@ -40,8 +40,6 @@ ipranges_file["prefixes"].each do |k|
 end
 $service.uniq!.sort!.compact!
 $region.uniq!.sort!.compact!
-services = $service.join(' | ')
-regions = $region.join(' | ')
 
 # Help and Usage text.
 USAGE = <<ENDUSAGE
@@ -52,10 +50,10 @@ Usage:
    ruby aws-ip-ranges.rb [-h] [-r region] -s service
 
     Service:
-      Valid values: #{services}
+      Valid values: #{$service.join(' | ')}
 
     Region:
-      Valid values: #{regions}
+      Valid values: #{$region.join(' | ')}
 
     Notes:
       Please remember that some services, such as CloudFront and Route53 are Global and as such use only GLOBAL as their region. Their information can be gathered with or without specifying region name
