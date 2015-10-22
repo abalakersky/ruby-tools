@@ -22,7 +22,9 @@ require 'ostruct'
 
 # Amazon IP Ranges file url. Change it to current one if Amazon moves it.
 url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+ipranges_file = JSON.parse(open(url).read)
 
+# Collect options from command line
 options = OpenStruct.new
 OptionParser.new do |opt|
   opt.on('-h', '--help', 'Usage') { |o| options.help = o}
@@ -30,6 +32,18 @@ OptionParser.new do |opt|
   opt.on('-s', '--service SERVICE', 'AWS Service') { |o| options.service = o }
 end.parse!
 
+# Create lists of available regions and services
+$service, $region = [], []
+ipranges_file["prefixes"].each do |k|
+  $service.push(k["service"])
+  $region.push(k["region"])
+end
+$service.uniq!.sort!.compact!
+$region.uniq!.sort!.compact!
+services = $service.join(' | ')
+regions = $region.join(' | ')
+
+# Help and Usage text.
 USAGE = <<ENDUSAGE
 
 This script is used to display AWS specific IP ranges that could be used for Firewall or Security Group configurations. These ranges specify public IPs that AWS uses for a each public facing service.
@@ -38,17 +52,16 @@ Usage:
    ruby aws-ip-ranges.rb [-h] [-r region] -s service
 
     Service:
-      Valid values: AMAZON | EC2 | CLOUDFRONT | ROUTE53 | ROUTE53_HEALTHCHECKS
+      Valid values: #{services}
 
     Region:
-      Valid values: ap-northeast-1 | ap-southeast-1 | ap-southeast-2 | cn-north-1 | eu-central-1 | eu-west-1 | sa-east-1 | us-east-1 | us-gov-west-1 | us-west-1 | us-west-2 | GLOBAL
+      Valid values: #{regions}
 
     Notes:
       Please remember that some services, such as CloudFront and Route53 are Global and as such use only GLOBAL as their region. Their information can be gathered with or without specifying region name
 ENDUSAGE
 
-ipranges_file = JSON.parse(open(url).read)
-
+# The actual work happens here.
 case
   when options.help || (!options.help && !options.region && !options.service)
     puts USAGE
