@@ -46,37 +46,36 @@ USAGE = <<ENDUSAGE
 
 This script is used to display AWS specific IP ranges that could be used for Firewall or Security Group configurations. These ranges specify public IPs that AWS uses for a each public facing service.
 
-Usage:
-   ruby aws-ip-ranges.rb [-h] [-r region] -s service
+  Usage:
+  ruby aws-ip-ranges.rb [-h] [-r region] -s service
 
-    Service:
-      Valid values: #{$service.join(' | ')}
+Service:
+  Valid values: #{$service.join(' | ')}
 
-    Region:
-      Valid values: #{$region.join(' | ')}
+  Region:
+  Valid values: #{$region.join(' | ')}
 
-    Notes:
-      Please remember that some services, such as CloudFront and Route53 are Global and as such use only GLOBAL as their region. Their information can be gathered with or without specifying region name
+  Notes:
+  Please remember that some services, such as CloudFront and Route53 are Global and as such use only GLOBAL as their region. Their information can be gathered with or without specifying region name
 ENDUSAGE
 
 # The actual work happens here.
 case
-  when options.help || (!options.help && !options.region && !options.service)
-    puts USAGE
-#    exit
+when options.help || (!options.help && !options.region && !options.service)
+  puts USAGE
+  #    exit
 
-  when options.region && options.service
-    ipranges_file["prefixes"].each do |k, v|
-      puts k["ip_prefix"] if k["region"] == options.region && k["service"] == options.service
-    end
+when options.region && options.service
+  ipranges_file["prefixes"].each do |k, v|
+    puts k["ip_prefix"] if k["region"] == options.region && k["service"] == options.service
+  end
 
-  when options.service && !options.region
-    ipranges_file["prefixes"].each do |k, v|
-      puts k["ip_prefix"] if k["service"] == options.service
-    end
+when options.service && !options.region
+  ipranges_file["prefixes"].each do |k, v|
+    puts k["ip_prefix"] if k["service"] == options.service
+  end
 
-  when options.region && !options.service
-    puts "Service type is a required option. Please include type of service you are looking for\n"
+when options.region && !options.service
+  puts "Service type is a required option. Please include type of service you are looking for\n"
 
 end
-
