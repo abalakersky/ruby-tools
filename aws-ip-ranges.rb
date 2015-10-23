@@ -63,7 +63,7 @@ ENDUSAGE
 case
   when options.help || (!options.help && !options.region && !options.service)
     puts USAGE
-    exit
+#    exit
 
   when options.region && options.service
     ipranges_file["prefixes"].each do |k, v|
